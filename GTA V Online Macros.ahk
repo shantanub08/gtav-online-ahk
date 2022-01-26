@@ -45,32 +45,33 @@
 ;   https://www.autohotkey.com/docs/KeyList.htm
 ; WARNING: If you don't want to use a certain binding use "F24"
 ;          or any other valid key or it will break!
-SnackMenuKey         := "+#" ; Open Snack menu (+ = shift, rtfm).
-AutoHealthKey        := "#" ; Automatic snacking. Eats 2 snacks from second snack slot.
-ArmorMenuKey         := "+F1" ; Open Armor menu.
-AutoArmorKey         := "F1" ; Automatic armor equip (uses super heavy armor only).
-RetrieveCarKey       := "F2" ; Request Personal Vehicle.
-TogglePassiveKey     := "F3" ; Toggle passive mode.
+SnackMenuKey         := "+F1" ; Open Snack menu
+AutoHealthKey        := "F1"  ; Automatic snacking. Eats 2 snacks from second snack slot.
+ArmorMenuKey         := "+F2" ; Open Armor menu.
+AutoArmorKey         := "F2"  ; Automatic armor equip (uses super heavy armor only).
+RetrieveCarKey       := "F3"  ; Request Personal Vehicle.
+FroggerKey			 := "+F3" ; Spawn free frogger
+SendBackVehKey		 := "^F3" ; Send Personal Vehicle Back to Storage
+CallLesterKey        := "F4"  ; Call Lester
+CallMechanicKey      := "F5"  ; Call Mechanic
+CallPegasusKey       := "+F5" ; Call Pegasus
+CallMerryweatherKey  := "F6"  ; Call Merryweather
+CallInsuranceKey     := "F7"  ; Call Insurance
+CallAssistantKey     := "F8"  ; Call Assistant
+ForceDisconnectKey   := "Media_Play_Pause" ; Force disconnect by suspending process for 10s, requires pssuspend.exe
+KillGameKey          := "Media_Stop" ; Kill game process, requires pskill.exe
+ChatSnippetsKey      := "F9" ; Gives you a few text snippets to put in chat (chat must be already open)
+DialDialogKey        := "F10" ; Call GUI with a list of almost all numbers
+TogglePassiveKey     := "F12" ; Toggle passive mode.
 EquipScarfKey        := "NumpadDot" ; Equip first scarf (heist outfit glitch, see readme/misc).
-ToggleRadarKey       := "+F2" ; Toggle between extended and standar radar.
+ToggleRadarKey       := "F13" ; Toggle between extended and standard radar.
 CycleOutfitKey       := "NumpadAdd" ; Equip next/cycle through saved outfits.
 ToggleVIPKey         := "NumpadSub" ; Toggle VIP mode (required when VIP/CEO/MC).
-ToggleCPHKey         := "^NumpadSub" ; Toggle Cayo Perico Heist Final mode (extra menu entry), also see DoToggleCPHWithVIP
-ToggleAFKKey         := "+NumpadSub" ; Toggle AFK mode
+ToggleCPHKey         := "^+NumpadSub" ; Toggle Cayo Perico Heist Final mode (extra menu entry), also see DoToggleCPHWithVIP
+ToggleAFKKey         := "F24" ; Toggle AFK mode
 ToggleClickerKey     := "+XButton2" ; Toggle Clicker (XButton2 = Mouse5)
-KillGameKey          := "+F12" ; Kill game process, requires pskill.exe
-ForceDisconnectKey   := "F12" ; Force disconnect by suspending process for 10s, requires pssuspend.exe
-ChatSnippetsKey      := "F11" ; Gives you a few text snippets to put in chat (chat must be already open)
 RandomHeistKey       := "F7" ; Chooses on-call random heist from phone options
-CEOBuzzardKey        := "F24" ; Spawn free CEO buzzard
 
-DialDialogKey        := "+F5" ; Call GUI with a list of almost all numbers
-CallMechanicKey      := "F5" ; Call Mechanic
-CallPegasusKey       := "F24" ; Call Pegasus
-CallMerryweatherKey  := "F24" ; Call Merryweather
-CallInsuranceKey     := "F6" ; Call Insurance
-CallLesterKey        := "+F6" ; Call Lester
-CallAssistantKey     := "^F6" ; Call Assistant
 
 CheckForUpdatesKey   := "F24" ; Checks on startup by default, see DoCheckForUpdates option
 
@@ -81,7 +82,7 @@ DoConfirmDisconnect  := true  ; If true the ForceDisconnect action will ask for 
 IntDisconnectDelay   := 10    ; Amount of seconds to freeze the process for, 10 works fine
 DoToggleCPHWithVIP   := false ; If true ToggleVIP will become a 3-way toggle (off/on/CayoPericoHeistFinal)
 DisableCapsOnAction  := true  ; Disable caps lock before executing macros, some macros might fail if caps lock is on
-DoCheckForUpdates    := true  ; Check for script updates on startup (you can manually bind this instead or additionally)
+DoCheckForUpdates    := false  ; Check for script updates on startup (you can manually bind this instead or additionally)
 
 ; Internal variables (probably no need to edit)
 IsVIPActivated       := false ; Initial status of CEO/VIP mode (after (re)loading script)
@@ -101,7 +102,7 @@ ArrayChatSnippets.push("You want some cool AHK macros? github.com/2called-chaos/
 ; Delays (you normally don't want to change these, you can try to play with these values if you have a slow/fast PC)
 IntFocusDelay        := 100  ; delay (in ms) after focussing game when AHK-GUI took focus.
 IntMenuDelay         := 120  ; delay (in ms) after opening interaction menu.
-IntPhoneMenuDelay    := 1850 ; delay (in ms) after opening phone menu.
+IntPhoneMenuDelay    := 600 ; delay (in ms) after opening phone menu.
 IntPhoneMenuDelay2   := 250  ; delay (in ms) after selecting phone menu entries.
 IntPhoneScrollDelay  := 75   ; delay (in ms) between scrolls in the phone menu.
 IntKeySendDelay      := 25   ; delay (in ms) delay between send key commands.
@@ -109,10 +110,16 @@ IntKeyPressDuration  := 5    ; duration (in ms) each key press is held down.
 
 
 ; In case you changed your ingame bindings:
-IGB_Interaction := "m"
-IGB_Phone := "up"
+IGB_Interaction := "M"
+IGB_Phone := "MButton"
 IGB_PhoneSpecial := "Space"
-IGB_Pause := "p"
+IGB_Pause := "6"
+IGB_Up := "Numpad8"
+IGB_Down := "Numpad5"
+IGB_Left := "Numpad4"
+IGB_Right := "Numpad6"
+IGB_Enter := "Q"
+IGB_Back := "Numpad9"
 
 
 ; Phone numbers for DialDialog GUI dialog (you can change the order if you want or hide entries by commenting them out)
@@ -206,7 +213,8 @@ Hotkey, %KillGameKey%, KillGame
 Hotkey, %ForceDisconnectKey%, ForceDisconnect
 Hotkey, %RandomHeistKey%, RandomHeist
 Hotkey, %ChatSnippetsKey%, ChatSnippets
-Hotkey, %CEOBuzzardKey%, CEOBuzzard
+Hotkey, %FroggerKey%, Frogger
+Hotkey, %SendBackVehKey%, SendBackVeh
 Hotkey, %DialDialogKey%, DialDialog
 Hotkey, %CallMechanicKey%, CallMechanic
 Hotkey, %CallPegasusKey%, CallPegasus
@@ -250,33 +258,50 @@ turnCapslockOff() {
 openInteractionMenu(isVIPActive, isCPHActive) {
   global IntMenuDelay
   global IGB_Interaction
+  global IGB_Up
+  global IGB_Down 
+  global IGB_Left 
+  global IGB_Right
+  global IGB_Enter
+  global IGB_Back
   turnCapslockOff()
   Send {%IGB_Interaction%}
   sleep, IntMenuDelay
   if (isCPHActive = 1) {
-    Send {Down}
-    Send {Down}
+    Send {%IGB_Down%}
+    Send {%IGB_Down%}
   } else if (isVIPActive = 1) {
-    Send {Down}
+    Send {%IGB_Down%}
   }
 }
 
 openSnackMenu() {
-  Send {Down}{Down}{Enter}{Down}{Down}{Down}{Down}{Enter}
+  global IGB_Up
+  global IGB_Down 
+  global IGB_Left 
+  global IGB_Right
+  global IGB_Enter
+  global IGB_Back
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}
 }
 
 openArmorMenu() {
-  Send {Down}{Down}{Enter}{Down}{Down}{Down}{Enter}
+	global IGB_Up
+	global IGB_Down 
+	global IGB_Left 
+	global IGB_Right
+	global IGB_Enter
+	global IGB_Back
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}
 }
 
 openOutfitMenu() {
-  Send {Down}{Down}{Down}{Enter}{Down}{Down}{Down}
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}
 }
 
 openPhone() {
   global IntPhoneMenuDelay
   global IGB_Phone
-
   ; Opens Phone Menu
   turnCapslockOff()
   Send {%IGB_Phone%}
@@ -296,6 +321,7 @@ scrollPhoneUp(by = 1) {
 makeCall(scrollUp, doOpenPhone = false, menu = 2) {
   global IntPhoneMenuDelay2
   global IntKeySendDelay
+  global IGB_Enter
   turnCapslockOff()
   if(doOpenPhone)
     openPhone()
@@ -303,14 +329,14 @@ makeCall(scrollUp, doOpenPhone = false, menu = 2) {
   ; go to contacts
   scrollPhoneUp(menu)
   sleep IntKeySendDelay
-  Send {Enter}
+  Send {%IGB_Enter%}
   sleep IntPhoneMenuDelay2
 
   ; scroll to contact
   scrollPhoneUp(scrollUp)
 
   ; call it
-  Send {Enter}
+  Send {%IGB_Enter%}
 }
 
 dialNumber(number, doOpenPhone = false) {
@@ -319,14 +345,20 @@ dialNumber(number, doOpenPhone = false) {
   global IntPhoneScrollDelay
   global IntPhoneMenuDelay2
   global IGB_PhoneSpecial
-
+  global IGB_Enter
+  global IGB_Up
+  global IGB_Down 
+  global IGB_Left 
+  global IGB_Right
+  global IGB_Enter
+  global IGB_Back
   turnCapslockOff()
   if(doOpenPhone)
     openPhone()
 
   ; go to contacts
   scrollPhoneUp(2)
-  Send {Enter}
+  Send {%IGB_Enter%}
   sleep IntPhoneMenuDelay2
 
   ; enter number screen
@@ -358,23 +390,23 @@ dialNumber(number, doOpenPhone = false) {
 
     ; move pointer
     if (deltax > 0)
-      Send {right %deltax%}
+      Send {%IGB_Right% %deltax%}
 
     if (deltay > 0)
-      Send {down %deltay%}
+      Send {%IGB_Down% %deltay%}
     
     if (deltax < 0) {
       deltax := Abs(deltax)
-      Send {left %deltax%}
+      Send {%IGB_Left% %deltax%}
     }
     
     if (deltay < 0) {
       deltay := Abs(deltay)
-      Send {up %deltay%}
+      Send {%IGB_Up% %deltay%}
     }
 
     pointer := A_LoopField
-    Send {Enter}
+    Send {%IGB_Enter%}
   }
 
   ; reset key delay (should not be necessary)
@@ -539,17 +571,17 @@ ToggleRadar:
   ; Necessary delay to allow settings to open properly
   sleep, IntPhoneMenuDelay2
 
-  Send {Right}{Right}{Right}{Right}
+  Send {%IGB_Right%}{%IGB_Right%}{%IGB_Right%}{%IGB_Right%}
   Sleep IntPhoneMenuDelay2 * 2
-  Send {Enter}
+  Send {%IGB_Enter%}
   Sleep IntPhoneMenuDelay2
-  Send {Down}{Down}{Down}{Down}{Down}
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}
   Sleep IntPhoneMenuDelay2
-  Send {Enter}
+  Send {%IGB_Enter%}
   Sleep IntPhoneMenuDelay2
-  Send {Down}{Down}{Down}{Down}{Down}
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}
   Sleep IntPhoneMenuDelay2
-  Send {Enter}
+  Send {%IGB_Enter%}
   Sleep IntPhoneMenuDelay2
   Send {%IGB_Pause%}
   return
@@ -615,17 +647,24 @@ ToggleCPH:
   bringGameIntoFocus()
   return
 
-; Open up snack menu for manual selection (or stock check) of snacks
-SnackMenu:
-  openInteractionMenu(IsVIPActivated, IsCPHActivated)
-  openSnackMenu()
-  return
-
 ; Automatic snacking. Eats 2 snacks from second snack slot and close menu.
 AutoHealth:
   openInteractionMenu(IsVIPActivated, IsCPHActivated)
   openSnackMenu()
-  Send {Down}{Enter}{Enter}{%IGB_Interaction%}
+  global IGB_Enter
+  global IGB_Up
+  global IGB_Down 
+  global IGB_Left 
+  global IGB_Right
+  global IGB_Enter
+  global IGB_Back
+  Send {%IGB_Down%}{%IGB_Enter%}{%IGB_Enter%}{%IGB_Interaction%}
+  return
+  
+; Open up snack menu for manual selection (or stock check) of snacks
+SnackMenu:
+  openInteractionMenu(IsVIPActivated, IsCPHActivated)
+  openSnackMenu()
   return
 
 ; Open up armor menu for manual selection (or stock check) of armor
@@ -638,35 +677,35 @@ ArmorMenu:
 AutoArmor:
   openInteractionMenu(IsVIPActivated, IsCPHActivated)
   openArmorMenu()
-  Send {Down}{Down}{Down}{Down}{Enter}{%IGB_Interaction%}
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}{%IGB_Interaction%}
   return
 
 ; Equips scarf to allow faster running with heist armor (see readme/misc)
 EquipScarf:
   openInteractionMenu(IsVIPActivated, IsCPHActivated)
   ; Opens scarf menu
-  Send {Down}{Down}{Down}{Enter}{Down}{Enter}
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}{%IGB_Down%}{%IGB_Enter%}
   ; equip scarf and exit menu. This line can be changed to pick different scarfs.
-  Send {Up}{Up}{Up}{Up}{Right}{%IGB_Interaction%}
+  Send {Numpad8}{Numpad8}{Numpad8}{Numpad8}{%IGB_Right%}{%IGB_Interaction%}
   return
 
 ; Cycle between your saved outfits
 CycleOutfit:
   openInteractionMenu(IsVIPActivated, IsCPHActivated)
   openOutfitMenu()
-  Send {Right}{Enter}{%IGB_Interaction%}
+  Send {%IGB_Right%}{%IGB_Enter%}{%IGB_Interaction%}
   return
 
 ; Toggle passive mode
 TogglePassive:
   openInteractionMenu(false, false) ; Ignore VIP status when going up
-  Send {Up}{Enter}{%IGB_Interaction%}
+  Send {%IGB_Up%}{%IGB_Enter%}{%IGB_Interaction%}
   return
 
 ; Retrieve your currently active vehicle
 RetrieveCar:
   openInteractionMenu(IsVIPActivated, IsCPHActivated)
-  Send {Down}{Down}{Down}{Down}{Enter}{Enter}{%IGB_Interaction%}
+  Send {%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Down%}{%IGB_Enter%}{%IGB_Enter%}{%IGB_Interaction%}
   return
 
 ; Chooses on-call random heist from phone options
@@ -675,13 +714,19 @@ RandomHeist:
   makeCall(13, true, 1)
   sleep IntKeySendDelay
   scrollPhoneUp(2) ; scroll up twice to solo-q
-  Send {Enter}{Enter}
+  Send {%IGB_Enter%}{%IGB_Enter%}
   return
 
-; Calls in free CEO buzzard (if you are CEO)
-CEOBuzzard:
-  openInteractionMenu(false, false)
-  Send {Enter}{Up 2}{Enter}{Down 4}{Enter}
+; Calls in free Frogger
+Frogger:
+  openInteractionMenu(IsVIPActivated, IsCPHActivated)
+  Send {%IGB_Down% 4}{%IGB_Enter%}{%IGB_Down%}{%IGB_Left%}{%IGB_Enter%}
+  return
+  
+; Sends Personal Vehicle Back to Storage
+SendBackVeh:
+  openInteractionMenu(IsVIPActivated, IsCPHActivated)
+  Send {%IGB_Down% 4}{%IGB_Enter%}{%IGB_Down% 4}{%IGB_Enter%}{%IGB_Interaction%}
   return
 
 ; Show a list of chat snippets to type out (chat must be opened)
